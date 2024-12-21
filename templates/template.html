@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipment Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shipment Delay Prediction</h1>
+    <form id="predictionForm">
+        <!-- Origin -->
+        <label for="origin">Origin:</label>
+        <select id="origin" name="origin" required>
+            <option value="Ahmedabad">Ahmedabad</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Jaipur">Jaipur</option>
+            <option value="Kolkata">Kolkata</option>
+            <option value="Lucknow">Lucknow</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Pune">Pune</option>
+        </select>
+
+        <!-- Destination -->
+        <label for="destination">Destination:</label>
+        <select id="destination" name="destination" required>
+            <option value="Ahmedabad">Ahmedabad</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Delhi">Delhi</option>
+            <option value="Hyderabad">Hyderabad</option>
+            <option value="Jaipur">Jaipur</option>
+            <option value="Kolkata">Kolkata</option>
+            <option value="Lucknow">Lucknow</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Pune">Pune</option>
+        </select>
+
+        <!-- Vehicle Type -->
+        <label for="vehicleType">Vehicle Type:</label>
+        <select id="vehicleType" name="vehicleType" required>
+            <option value="Truck">Truck</option>
+            <option value="Lorry">Lorry</option>
+            <option value="Container">Container</option>
+            <option value="Trailer">Trailer</option>
+        </select>
+
+        <!-- Distance -->
+        <label for="distance">Distance (km):</label>
+        <input type="number" id="distance" name="distance" min="0" required>
+
+        <!-- Weather Conditions -->
+        <label for="weather">Weather Conditions:</label>
+        <select id="weather" name="weather" required>
+            <option value="Clear">Clear</option>
+            <option value="Fog">Fog</option>
+            <option value="Rain">Rain</option>
+            <option value="Storm">Storm</option>
+        </select>
+
+        <!-- Traffic Conditions -->
+        <label for="trafficConditions">Traffic Conditions:</label>
+        <select id="trafficConditions" name="trafficConditions" required>
+            <option value="Light">Light</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Heavy">Heavy</option>
+        </select>
+
+        <!-- Shipment Dates -->
+        <label for="shipmentDate">Shipment Date:</label>
+        <input type="date" id="shipmentDate" name="shipmentDate" required>
+
+        <label for="plannedDate">Planned Delivery Date:</label>
+        <input type="date" id="plannedDate" name="plannedDate" required>
+
+        <label for="actualDate">Actual Delivery Date:</label>
+        <input type="date" id="actualDate" name="actualDate" required>
+
+        <!-- Submit Button -->
+        <button type="submit">Predict</button>
+    </form>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+    
+            const formData = {
+                origin: document.getElementById('origin').value,
+                destination: document.getElementById('destination').value,
+                vehicleType: document.getElementById('vehicleType').value,
+                distance: parseFloat(document.getElementById('distance').value),
+                weather: document.getElementById('weather').value,
+                trafficConditions: document.getElementById('trafficConditions').value,
+                shipmentDate: document.getElementById('shipmentDate').value,
+                plannedDate: document.getElementById('plannedDate').value,
+                actualDate: document.getElementById('actualDate').value
+            };
+    
+            try {
+                const response = await fetch('http://127.0.0.1:5000/predict', {  // Updated URL to match Flask's port
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+    
+                const result = await response.json();
+                alert(`Prediction: ${result.prediction}`);
+            } catch (error) {
+                alert('Error during prediction. Please try again.');
+                console.error(error);
+            }
+        });
+    </script>    
+</body>
+</html>
